@@ -17,12 +17,12 @@ app.include_router(auth_router)  # this line must be above creating fastAPI
 @app.get("/")
 def home():
     return {
-        "message": "Authentication API running"
+        "message": "Authentication API is running"
     }
 
 @app.get("/health")
 def health():
     with engine.connect():
         return {
-            "database": "connected"
+            "database": "Connected"
         }
