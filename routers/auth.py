@@ -17,6 +17,8 @@ from utils.security import get_current_user
 
 from fastapi.security import OAuth2PasswordRequestForm  # pip install python-multipart
 
+from app.logger import logger
+
 router = APIRouter()
 
 @router.post("/register")
@@ -32,6 +34,9 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
         email=user.email,
         password=hash_password(user.password)
     )
+
+    logger.info(f"New user registered: {user.email}")
+
     db.add(new_user)
     db.commit()
     return {
@@ -59,6 +64,8 @@ def login(form_data: OAuth2PasswordRequestForm=Depends(), db: Session=Depends(ge
         "sub": db_user.email
     })
 
+    logger.info(f"User logged in: {db_user.email}")
+    
     return {
         "access_token": access_token,
         "token_type": "bearer"
